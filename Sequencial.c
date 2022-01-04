@@ -5,8 +5,9 @@
 #include <time.h>
 
 #define NARRAY 1000000   // Array size
-#define NBUCKET 1000  // Number of buckets
-#define INTERVAL 10  // Each bucket capacity
+
+static int NBUCKET = 1000;  // Number of buckets
+static int INTERVAL; // Each bucket capacity
 
 // 0 -> INSERTION_SORT | 1 -> QUICK_SORT
 #define METHOD 1
@@ -279,9 +280,46 @@ int isArraySorted(int s[], int n) {
 // Driver code
 int main (void) {
 
+    clock_t t;
+
+    // Definir o número de Buckets incial
+    //omp_set_num_threads(NBUCKET);
+
+    // Número máximo dos inteiros que array tem
+    int max_number = 10001;
+    
+    // Criar o array dos números
+    t = clock();
+
     int array[NARRAY];
-    for (int a = 0; a < NARRAY; a++) {
-        array[a] = rand() % 10000;
+
+    for (int a = 0; a < NARRAY; a++) 
+        array[a] = rand() % max_number;
+    
+    t = clock() - t;
+
+    printf("It took %f seconds to create the new array \n", ((double)t)/CLOCKS_PER_SEC);
+
+
+    // Descobrir o maior elemento
+    int largestNumber = largest(array, NARRAY);
+    printf("Largest number was %d\n", largestNumber);
+
+    // Definir o intervalo do array
+    if ((largestNumber % NBUCKET) != 0) {
+        INTERVAL = largestNumber/NBUCKET + 1;
+    } else {
+        INTERVAL = largestNumber/NBUCKET;
+    }
+
+    printf("Interval set to %d\n", INTERVAL);
+
+    // Ver se é necessário acrescentar um bucket ou um interval
+    if ((largestNumber % NBUCKET) == 0) {
+        if (NBUCKET >= INTERVAL)
+            NBUCKET++;
+        else
+            INTERVAL++;
     }
 
     printf("Size of initial array: %ld\n\n", sizeof(array)/sizeof(int) );
@@ -290,10 +328,12 @@ int main (void) {
     //print(array);
     printf("-------------\n");
 
-    clock_t t;
     t = clock();
+
     BucketSort(array);
+    
     t = clock() - t;
+    
     double time_taken = ((double)t)/CLOCKS_PER_SEC;
 
     printf("-------------\n");

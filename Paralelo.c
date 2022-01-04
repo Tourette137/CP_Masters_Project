@@ -4,13 +4,14 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define NARRAY 1000000   // Array size
+
+static int NBUCKET = 1000;  // Number of buckets
+static int INTERVAL; // Each bucket capacity
+
 // 0 -> INSERTION_SORT | 1 -> QUICK_SORT
 #define METHOD 1
 
-#define NARRAY 500000   // Array size
-
-static int NBUCKET = 1000;  // Number of buckets
-static int INTERVAL; 
 
 struct Node {
     int data;
@@ -285,7 +286,7 @@ int main (void) {
     //omp_set_num_threads(NBUCKET);
 
     // Número máximo dos inteiros que array tem
-    int max_number = 1000000;
+    int max_number = 10000;
     
     // Criar o array dos números
     t = clock();
@@ -299,11 +300,14 @@ int main (void) {
 
     printf("It took %f seconds to create the new array \n", ((double)t)/CLOCKS_PER_SEC);
 
+
     // Descobrir o maior elemento
     int largestNumber = largest(array, NARRAY);
+    printf("Largest number was %d\n", largestNumber);
 
     // Definir o intervalo do array
-    INTERVAL = largestNumber/NBUCKET;
+    INTERVAL = largestNumber/NBUCKET + 1;
+    printf("Interval set to %d\n", INTERVAL);
 
     if ((largestNumber % NBUCKET) == 0) {
         if (NBUCKET >= INTERVAL)
@@ -312,7 +316,6 @@ int main (void) {
             INTERVAL++;
     }
 
-    // Verificar o tamanho do array inicial
     printf("Size of initial array: %ld\n\n", sizeof(array)/sizeof(int) );
 
     printf("Initial array: ");
@@ -326,7 +329,7 @@ int main (void) {
 
     printf("-------------\n");
     printf("Sorted array: ");
-    print(array);
+    //print(array);
 
     printf("\nSize of final array: %ld\n", sizeof(array)/sizeof(int) );
 
