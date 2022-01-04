@@ -1,0 +1,6 @@
+Predifinidos:
+    Tamanho do array
+    Numero de Buckets
+    Intervalo dos Buckets
+
+    -> Neste caso, se tivermos 100 buckets, com intervalo 10, o numero maximo será 1000-1
