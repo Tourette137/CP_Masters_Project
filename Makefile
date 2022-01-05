@@ -1,43 +1,29 @@
-SRC = tp.c
-
-OBJ = $(SRC:.cpp=.o)
-
-OUT = tp
-
-# include directories
+CC = gcc
+LIBS = -lm -fopenmp
 INCLUDES = -I.
 
-# C compiler flags
-#CCFLAGS = -O0 -Wall
-CCFLAGS = -O2 -Wall -fno-omit-frame-pointer -g -I/share/apps/papi/5.4.1/include -L/share/apps/papi/5.4.1/lib
-#CCFLAGS = -O3 -Wall -msse4.1 -march=i686
+CFLAGS = -O2 -Wall -std=c99 -fno-omit-frame-pointer -g -I. -I/share/apps/papi/5.4.1/include -I$(INCDIR) -L. -L/share/apps/papi/5.4.1/lib
 
-# compiler
-CCC = gcc
-#CCC = /opt/intel/Compiler/11.1/073/bin/ia32/icpc
-#CCC = g++-4.5
+OBJDIR = obj
+INCDIR = includes
 
-# libraries
-LIBS = -lm -lpapi -fopenmp
+OBJS = $(OBJDIR)/QuickSort.o $(OBJDIR)/InsertionSort.o $(OBJDIR)/BucketSort.o $(OBJDIR)/Utils.o $(OBJDIR)/BubbleSort.o
+HEAD = $(INCDIR)/QuickSort.h $(INCDIR)/InsertionSort.h $(INCDIR)/BucketSort.h $(INCDIR)/Utils.h $(INCDIR)/BubbleSort.h $(INCDIR)/config.h
 
-.SUFFIXES: .cpp .c
+SEQUENTIAL_OBJS = $(OBJDIR)/Sequencial.o
+PARALLEL_OBJS = $(OBJDIR)/Paralelo.o
+
+default: Sequencial Paralelo
+
+Sequencial: $(SEQUENTIAL_OBJS) $(OBJS)
+	$(CC) $(CFLAGS) $(SEQUENTIAL_OBJS) $(OBJS) $(LIBS) -o Sequencial
+
+Paralelo: $(PARALLEL_OBJS) $(OBJS)
+	$(CC) $(CFLAGS) $(PARALLEL_OBJS) $(OBJS) $(LIBS) -o Paralelo
+
+$(OBJDIR)/%.o: %.c
+	$(CC) $(CFLAGS) $(INCLUDES) $(LIBS) -c $< -o $@
 
 
-default: $(OUT)
-
-.cpp.o: 
-	$(CCC) $(CCFLAGS) $(INCLUDES)  -c $< -o $@
-
-.c.o: 
-	$(CCC) $(CCFLAGS) $(INCLUDES) -c $< -o $@
-
-$(OUT): 
-	$(OBJ) $(CCC) -o $(OUT) $(CCFLAGS) $(OBJ) $(LIBS)
-
-depend:  dep
-#
-#dep:
-#       makedepend -- $(CFLAGS) -- $(INCLUDES) $(SRC)
-
-clean:
-	rm -f *.o .a *~ Makefile.bak $(OUT)
+clean: 
+	rm -f $(OBJDIR)/*.o .a *~ Makefile.bak Sequencial Paralelo
