@@ -1,5 +1,6 @@
 CC = gcc
-LIBS = -lm -fopenmp
+#LIBS = -lm -fopenmp
+LIBS = -lm -fopenmp -lpapi
 INCLUDES = -I.
 
 CFLAGS = -O2 -Wall -std=c99 -fno-omit-frame-pointer -g -I. -I/share/apps/papi/5.4.1/include -I$(INCDIR) -L. -L/share/apps/papi/5.4.1/lib
