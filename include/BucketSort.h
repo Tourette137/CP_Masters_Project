@@ -14,4 +14,7 @@ int getBucketIndex(int value);
 void ordenaSequencialmente (struct Node **buckets);
 void ordenaParalelamente (struct Node **buckets);
 
+void inicializaSequencialmente (struct Node **buckets);
+void inicializaParalelamente (struct Node **buckets);
+
 #endif

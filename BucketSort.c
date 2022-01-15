@@ -11,7 +11,6 @@
 void BucketSort(int arr[]) {
 
     if (SEQ_PAR) {
-        printf("SOU PARALELO\n");
         // Definir o número de Threads incial
         omp_set_num_threads(OMP_NUM_THREADS);
     }
@@ -22,10 +21,11 @@ void BucketSort(int arr[]) {
     // Create buckets and allocate memory size
     buckets = (struct Node **)malloc(sizeof(struct Node *) * NBUCKET);
 
-    // Initialize empty buckets
-    for (i = 0; i < NBUCKET; ++i) {
-        buckets[i] = NULL;
-    }
+    if (SEQ_PAR)
+        inicializaSequencialmente(buckets);
+    else
+        inicializaParalelamente(buckets);
+
 
     // Fill the buckets with respective elements
     for (i = 0; i < NARRAY; ++i) {
@@ -37,30 +37,11 @@ void BucketSort(int arr[]) {
         buckets[pos] = current;
     }
 
-    // Print the buckets along with their elements
-    /*
-    for (i = 0; i < NBUCKET; i++) {
-        printf("Bucket[%d]: ", i);
-        printBuckets(buckets[i]);
-        printf("\n");
-    }
-    */
-
     // Sort the elements of each bucket
     if (SEQ_PAR)
         ordenaParalelamente(buckets);
     else
         ordenaSequencialmente(buckets);
-
-    /*
-    printf("-------------\n");
-    printf("Bucktets after sorting\n");
-    for (i = 0; i < NBUCKET; i++) {
-        printf("Bucket[%d]: ", i);
-        printBuckets(buckets[i]);
-        printf("\n");
-    }
-    */
 
     // Put sorted elements on arr
     for (j = 0, i = 0; i < NBUCKET; ++i) {
@@ -101,7 +82,7 @@ void printBuckets(struct Node *list) {
 
 void ordenaSequencialmente (struct Node **buckets) {
     for (int i = 0; i < NBUCKET; ++i) {
-        printf("VOU ORDENAR\n");
+        //printf("VOU ORDENAR\n");
         if (METHOD == 0) {
             buckets[i] = InsertionSort(buckets[i]);
         } 
@@ -116,7 +97,7 @@ void ordenaParalelamente (struct Node **buckets) {
     #pragma omp parallel for schedule(dynamic)
 
     for (int i = 0; i < NBUCKET; ++i) {
-        printf("VOU ORDENAR\n");
+        //printf("VOU ORDENAR\n");
         if (METHOD == 0) {
             buckets[i] = InsertionSort(buckets[i]);
         } 
@@ -124,5 +105,21 @@ void ordenaParalelamente (struct Node **buckets) {
             struct Node *last = last_node(buckets[i]);
             buckets[i] = quick_sort(buckets[i], last);
         }
+    }
+}
+
+void inicializaSequencialmente (struct Node **buckets) {
+    // Initialize empty buckets
+    for (int i = 0; i < NBUCKET; ++i) {
+        buckets[i] = NULL;
+    }
+}
+
+void inicializaParalelamente (struct Node **buckets) {
+    #pragma omp parallel for schedule(dynamic)
+
+    // Initialize empty buckets
+    for (int i = 0; i < NBUCKET; ++i) {
+        buckets[i] = NULL;
     }
 }
