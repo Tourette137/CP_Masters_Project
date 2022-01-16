@@ -8,8 +8,8 @@ CFLAGS = -O2 -Wall -std=c99 -fno-omit-frame-pointer -g -I. -I/share/apps/papi/5.
 OBJDIR = obj
 INCDIR = includes
 
-OBJS = $(OBJDIR)/QuickSort.o $(OBJDIR)/InsertionSort.o $(OBJDIR)/BucketSort.o $(OBJDIR)/Utils.o $(OBJDIR)/BubbleSort.o
-HEAD = $(INCDIR)/QuickSort.h $(INCDIR)/InsertionSort.h $(INCDIR)/BucketSort.h $(INCDIR)/Utils.h $(INCDIR)/BubbleSort.h $(INCDIR)/config.h
+OBJS = $(OBJDIR)/QuickSort.o $(OBJDIR)/InsertionSort.o $(OBJDIR)/BucketSort.o $(OBJDIR)/Utils.o $(OBJDIR)/BubbleSort.o $(OBJDIR)/papiRun.o
+HEAD = $(INCDIR)/QuickSort.h $(INCDIR)/InsertionSort.h $(INCDIR)/BucketSort.h $(INCDIR)/Utils.h $(INCDIR)/BubbleSort.h $(INCDIR)/config.h $(INCDIR)/papiRun.h
 
 SEQUENTIAL_OBJS = $(OBJDIR)/Sequencial.o
 PARALLEL_OBJS = $(OBJDIR)/Paralelo.o
@@ -28,3 +28,6 @@ $(OBJDIR)/%.o: %.c
 
 clean: 
 	rm -f $(OBJDIR)/*.o .a *~ Makefile.bak Sequencial Paralelo
+
+cleanOut:
+	rm -f slurm*

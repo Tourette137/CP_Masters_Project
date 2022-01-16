@@ -5,6 +5,7 @@
 #include "include/QuickSort.h"
 #include "include/Utils.h"
 #include "include/config.h"
+#include "include/papiRun.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -102,12 +103,18 @@ int main (int argc, char **argv) {
     }
 
     // Bucket Sort
-    double startSort = omp_get_wtime();
+    double secondsSort;
 
-    BucketSort(array);
+    if (argc==7 && !strcmp(argv[6], "papi")) {
+        runPapi(&secondsSort, &array);
+    } else {
+        double startSort = omp_get_wtime();
+
+        BucketSort(array);
     
-    double endSort = omp_get_wtime();
-    double secondsSort = (double)(endSort - startSort);
+        double endSort = omp_get_wtime();
+        secondsSort = (double)(endSort - startSort);
+    }
 
     // Print result
     printResult(secondsArray, secondsSort, array, max_number);
