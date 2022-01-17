@@ -20,7 +20,7 @@ struct Node *quick_sort(struct Node *first, struct Node *last) {
 
 	if (first == last)
 	{
-		return NULL;
+		return first;
 	}
 	struct Node *pivot = parition(first, last);
 	if (pivot != NULL && pivot->next != NULL)

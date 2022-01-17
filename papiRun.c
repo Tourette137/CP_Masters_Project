@@ -8,8 +8,8 @@
 #include "include/Utils.h"
 #include "papi.h"
 
-#define NUM_EVENTS 4
-int Events[NUM_EVENTS] = { PAPI_TOT_CYC, PAPI_TOT_INS, PAPI_L1_DCM, PAPI_L2_DCM};
+#define NUM_EVENTS 3
+int Events[NUM_EVENTS] = {PAPI_L1_DCM, PAPI_L2_DCM, PAPI_L3_TCM};
 
 // PAPI counters' values
 long long values[NUM_EVENTS], min_values[NUM_EVENTS];

@@ -82,28 +82,34 @@ void printBuckets(struct Node *list) {
 
 void ordenaSequencialmente (struct Node **buckets) {
     for (int i = 0; i < NBUCKET; ++i) {
-        //printf("VOU ORDENAR\n");
-        if (METHOD == 0) {
-            buckets[i] = InsertionSort(buckets[i]);
-        } 
-        else if (METHOD == 1) {
-            struct Node *last = last_node(buckets[i]);
-            buckets[i] = quick_sort(buckets[i], last);
+        if (buckets[i] != NULL) {
+            //printf("VOU ORDENAR\n");
+            if (METHOD == 0) {
+                buckets[i] = InsertionSort(buckets[i]);
+            } 
+            else if (METHOD == 1) {
+                struct Node *last = last_node(buckets[i]);
+                buckets[i] = quick_sort(buckets[i], last);
+            }
         }
     }
 }
 
 void ordenaParalelamente (struct Node **buckets) {
-    #pragma omp parallel for schedule(dynamic)
+
+    #pragma omp parallel
+    #pragma omp for schedule(dynamic)
 
     for (int i = 0; i < NBUCKET; ++i) {
-        //printf("VOU ORDENAR\n");
-        if (METHOD == 0) {
-            buckets[i] = InsertionSort(buckets[i]);
-        } 
-        else if (METHOD == 1) {
-            struct Node *last = last_node(buckets[i]);
-            buckets[i] = quick_sort(buckets[i], last);
+        if (buckets[i] != NULL) {
+            //printf("VOU ORDENAR\n");
+            if (METHOD == 0) {
+                buckets[i] = InsertionSort(buckets[i]);
+            } 
+            else if (METHOD == 1) {
+                struct Node *last = last_node(buckets[i]);
+                buckets[i] = quick_sort(buckets[i], last);
+            }
         }
     }
 }
@@ -116,7 +122,8 @@ void inicializaSequencialmente (struct Node **buckets) {
 }
 
 void inicializaParalelamente (struct Node **buckets) {
-    #pragma omp parallel for schedule(dynamic)
+    #pragma omp parallel
+    #pragma omp for schedule(dynamic)
 
     // Initialize empty buckets
     for (int i = 0; i < NBUCKET; ++i) {
